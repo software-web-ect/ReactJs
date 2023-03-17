@@ -1,0 +1,13 @@
+POST http://127.0.0.1:3000/users
+Content-Type: application/json
+
+{
+    "name": "Sulih",
+    "email": "sulih055@gmail.com",
+    "password": "123",
+    "confpassword":"123",
+    "role":"admin"
+}
+
+###
+GET http://127.0.0.1:3000/users
