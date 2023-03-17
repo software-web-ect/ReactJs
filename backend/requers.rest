@@ -1,4 +1,4 @@
-POST http://127.0.0.1:3000/users
+POST http://localhost:5000/users
 Content-Type: application/json
 
 {
@@ -10,4 +10,9 @@ Content-Type: application/json
 }
 
 ###
-GET http://127.0.0.1:3000/users
+POST http://localhost:5000/login
+
+{
+    "email": "sulih055@gmail.com",
+    "password": "12345"
+}
