@@ -1,33 +1,40 @@
-import Users from "../models/UserModel.js";
+import User from "../models/UserModel.js";
 import argon2 from "argon2";
 
-export const Login =async (req, res) =>{
-    const User = await Users.findOne({
-        where:{
-            email:req.body.email
+export const Login = async (req, res) =>{
+    const users = await User.findOne({
+        where: {
+            email: req.body.email
         }
     });
-    if(!Users) return res.status(404).json({msg: "user tidak di temukan"});
-    const match = await argon2.verify(Users.password, req.body.password);
-    if(!match) return res.status(404).json({msg: "Wrong"});
-    req.session.Userid = Users.uuid
-    const uuid = Users.uuid;
-    const name = Users.name;
-    const email = Users.email;
-    const role = Users.role;
-    res.status(200).json(uuid, name, email,role);
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
+    const match = await argon2.verify(user.password, req.body.password);
+    if(!match) return res.status(400).json({msg: "Wrong Password"});
+    req.session.userId = user.uuid;
+    const uuid = user.uuid;
+    const name = user.name;
+    const email = user.email;
+    const role = user.role;
+    res.status(200).json({uuid, name, email, role});
 }
 
 export const Me = async (req, res) =>{
-    if(!req.session.Userid){
-        return res.status(401).json({msg: "Mohon login"});
+    if(!req.session.userId){
+        return res.status(401).json({msg: "Mohon login ke akun Anda!"});
     }
-    const User = await Users.findOne({
-        attributes: ['uuid', 'name', 'email', 'role'],
-        where : {
-            uuid : req.session.Userid
+    const users = await User.findOne({
+        attributes:['uuid','name','email','role'],
+        where: {
+            uuid: req.session.userId
         }
     });
-    if(!Users) return res.status(404).json({msg: "user tidak di temukan"});
-    res.status(200).json(Users); 
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
+    res.status(200).json(user);
+}
+
+export const logOut = (req, res) =>{
+    req.session.destroy((err)=>{
+        if(err) return res.status(400).json({msg: "Tidak dapat logout"});
+        res.status(200).json({msg: "Anda telah logout"});
+    });
 }

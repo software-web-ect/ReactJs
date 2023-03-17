@@ -9,15 +9,16 @@ const Register = () => {
     const [confPassword, setConfPassword] = useState('');
     const [msg, setMsg] = useState('');
     const history = useHistory();
- 
+    
     const Register = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:3000/user', {
+            await axios.post('http://localhost:3000/users', {
                 name: name,
                 email: email,
                 password: password,
-                confPassword: confPassword
+                confPassword: confPassword,
+            
             });
             history.push("/");
         } catch (error) {
